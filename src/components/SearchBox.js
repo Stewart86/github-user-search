@@ -1,18 +1,37 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
+import { compose } from "redux";
 
 import {
   Grid,
   TextField,
   Button,
   List,
-  CircularProgress
+  CircularProgress,
+  Paper,
 } from "@material-ui/core";
+import { withStyles } from "@material-ui/core/styles";
 
 import { GetUserList, CheckSession, Logout } from "../actions/userActions";
 import UserList from "./UserList";
 import LoginDialog from "./LoginDialog";
+import Pagination from "./Pagination"
+import PageNumbering from "./PageNumbering";
+
+const styles = theme => ({
+  root: {
+    flexGrow: 1
+  },
+  contents: {
+    padding: theme.spacing.unit * 2,
+    textAlign: "center",
+    color: theme.palette.text.secondary
+  },
+  button: {
+    margin: theme.spacing.unit 
+  }
+});
 
 class SearchBox extends Component {
   static propTypes = {
@@ -51,63 +70,69 @@ class SearchBox extends Component {
     });
   };
 
-  handleNextPage = () => {
+  handlePageFlip = page => {
     this.setState({
-      currentPage: this.state.currentPage + 1
+      currentPage: page
     });
-    this.props.GetUserList(this.state.userId, this.state.currentPage);
-  };
-
-  handlePreviousPage = () => {
-    this.setState({
-      currentPage: this.state.currentPage - 1
-    });
-    this.props.GetUserList(this.state.userId, this.state.currentPage);
+    this.props.GetUserList(this.state.userId, page);
   };
 
   render() {
-    const { userList, pagination, loading, LoginBtn } = this.props;
+    const { userList, pagination, loading, LoginBtn, classes } = this.props;
+
+    const { currentPage, userId, open } = this.state;
 
     return (
       <div>
-        <Grid>
-          <Button onClick={this.handlePreviousPage}>Prev</Button>
-          {this.state.currentPage}
-          <Button onClick={this.handleNextPage}>Next</Button>
-          <br />
-          {pagination === 1
-            ? ``
-            : `${pagination[0]}-${pagination[pagination.length - 1]} pages`}
+        <Grid container className={classes.contents}>
+          <Grid item sm />
+          <Grid item sm justify={"center"}>
+            <Grid justify={"center"}>
+
+              <TextField
+                label={"Search"}
+                placeholder={userId}
+                margin="normal"
+                variant="outlined"
+                onChange={this.handleChange}
+              />
+              <Button className={classes.button} onClick={() => this.handleClickOpen()}>{LoginBtn}</Button>
+              {/* Pagination start */}
+              <Pagination onHandlePageFlip={this.handlePageFlip} currentPage={currentPage} LastPage={pagination[pagination.length - 1]} />
+              <PageNumbering page={pagination} current={currentPage} max={pagination[pagination.length - 1]}/>
+              {/* pagination ends */}
+            </Grid>
+            <Grid container direction={"column"}>
+              {userList.length === 0 ? (
+                ""
+              ) : (
+                <Paper>
+                  <List width={400}>
+                    {loading ? (
+                      <CircularProgress />
+                    ) : (
+                      userList.map(el => (
+                        <UserList
+                          key={el.id}
+                          avatar={el.avatar_url}
+                          userId={el.login}
+                          primary={el.login}
+                          secondary={"Followers: <1234> | Following: <4321>"}
+                        />
+                      ))
+                    )}
+                  </List>
+                </Paper>
+              )}
+              {/* Pagination start */}
+              <PageNumbering page={pagination} current={currentPage} max={pagination[pagination.length - 1]}/>
+              <Pagination onHandlePageFlip={this.handlePageFlip} currentPage={currentPage} LastPage={pagination[pagination.length - 1]} />
+              {/* pagination ends */}
+            </Grid>
+          </Grid>
+          <Grid item sm />
         </Grid>
-        <TextField
-          label={"Search"}
-          placeholder={this.state.userId}
-          margin="normal"
-          variant="outlined"
-          onChange={this.handleChange}
-        />
-        <Button onClick={() => this.handleClickOpen()}>{LoginBtn}</Button>
-        <Grid>
-          <List>
-            {loading ? (
-              <CircularProgress />
-            ) : (
-              userList.map(el => (
-                <UserList
-                  key={el.id}
-                  avatar={el.avatar_url}
-                  userId={el.login}
-                  primary={el.login}
-                  secondary={"Followers: <1234> | Following: <4321>"}
-                />
-              ))
-            )}
-          </List>
-          <LoginDialog
-            open={this.state.open}
-            handleClose={() => this.handleClose()}
-          />
-        </Grid>
+        <LoginDialog open={open} handleClose={() => this.handleClose()} />
       </div>
     );
   }
@@ -129,8 +154,10 @@ const mapDispatchToProps = dispatch => {
     Logout: () => dispatch(Logout())
   };
 };
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
+export default compose(
+  withStyles(styles),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )
 )(SearchBox);

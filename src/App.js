@@ -1,23 +1,27 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
-
 import SearchBox from './components/SearchBox';
+import NavBar from './components/NavBar';
+
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import createBrowserHistory from "history/createBrowserHistory";
+
+export const history = createBrowserHistory();
+
 
 class App extends Component {
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-        <SearchBox/>
-        
-      </div>
+      <React.Fragment>
+        <NavBar/>
+        <Router>
+          <React.Fragment>
+            <Switch>
+              <Route exact path="/" component={SearchBox}/>
+              {/* <Route path="/user/:id" component={UserProfile} /> */}
+            </Switch>
+          </React.Fragment>
+        </Router>
+      </React.Fragment>
     );
   }
 }

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
 
-import { IconButton, ListItem, ListItemText, Avatar } from "@material-ui/core";
+import { IconButton, ListItem, ListItemText, Avatar, Divider } from "@material-ui/core";
 
 import InfoIcon from "@material-ui/icons/InfoRounded";
 
@@ -55,6 +55,7 @@ class UserList extends Component {
             <InfoIcon color={"primary"} />
           </IconButton>
         </ListItem>
+        <Divider/>
       </React.Fragment>
     );
   }
