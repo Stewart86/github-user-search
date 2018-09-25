@@ -1,7 +1,5 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
-import { withRouter } from "react-router-dom";
-
+import PropTypes from "prop-types";
 import axios from "axios";
 
 import {
@@ -14,7 +12,11 @@ import {
 
 import InfoIcon from "@material-ui/icons/InfoRounded";
 
-class UserList extends Component {
+class UserFollowersList extends Component {
+  static propTypes = {
+    userId: PropTypes.string.isRequired
+  };
+
   state = {
     followers: "loading...",
     following: "loading..."
@@ -24,7 +26,7 @@ class UserList extends Component {
     var encodedId = sessionStorage.getItem("github-auth");
 
     axios
-      .get(`https://api.github.com/users/${this.props.userId}`, {
+      .get(`https://api.github.com/users/${this.props.userId}/followers`, {
         headers: {
           Authorization: `Basic ${encodedId}`
         }
@@ -56,10 +58,10 @@ class UserList extends Component {
             }`}
           />
           <IconButton
-            component={Link}
-            to={`/user/${userId}`}
             variant={"flat"}
+            size={"small"}
             color={"default"}
+            onClick={() => console.log("clicked")}
           >
             <InfoIcon color={"primary"} />
           </IconButton>
@@ -70,4 +72,4 @@ class UserList extends Component {
   }
 }
 
-export default withRouter(UserList);
+export default UserFollowersList;

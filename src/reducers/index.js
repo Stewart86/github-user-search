@@ -1,11 +1,13 @@
 import { combineReducers } from "redux";
 
-import {User} from "./userReducer"
-import {Followers} from "./followerReducer"
-import {Auth} from "./authReducer"
+import { UserList } from "./userListReducer";
+import { UserFollowers } from "./userFollowersReducer";
+import { Auth } from "./authReducer";
+import { User } from "./userReducer";
 
 export default combineReducers({
+  UserList,
   User,
-  Followers,
+  UserFollowers,
   Auth
 });

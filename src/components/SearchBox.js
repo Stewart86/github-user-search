@@ -9,14 +9,14 @@ import {
   Button,
   List,
   CircularProgress,
-  Paper,
+  Paper
 } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 
 import { GetUserList, CheckSession, Logout } from "../actions/userActions";
 import UserList from "./UserList";
 import LoginDialog from "./LoginDialog";
-import Pagination from "./Pagination"
+import Pagination from "./Pagination";
 import PageNumbering from "./PageNumbering";
 
 const styles = theme => ({
@@ -29,7 +29,7 @@ const styles = theme => ({
     color: theme.palette.text.secondary
   },
   button: {
-    margin: theme.spacing.unit 
+    margin: theme.spacing.unit
   }
 });
 
@@ -86,9 +86,8 @@ class SearchBox extends Component {
       <div>
         <Grid container className={classes.contents}>
           <Grid item sm />
-          <Grid item sm justify={"center"}>
-            <Grid justify={"center"}>
-
+          <Grid item sm>
+            <Grid>
               <TextField
                 label={"Search"}
                 placeholder={userId}
@@ -96,10 +95,23 @@ class SearchBox extends Component {
                 variant="outlined"
                 onChange={this.handleChange}
               />
-              <Button className={classes.button} onClick={() => this.handleClickOpen()}>{LoginBtn}</Button>
+              <Button
+                className={classes.button}
+                onClick={() => this.handleClickOpen()}
+              >
+                {LoginBtn}
+              </Button>
               {/* Pagination start */}
-              <Pagination onHandlePageFlip={this.handlePageFlip} currentPage={currentPage} LastPage={pagination[pagination.length - 1]} />
-              <PageNumbering page={pagination} current={currentPage} max={pagination[pagination.length - 1]}/>
+              <Pagination
+                onHandlePageFlip={this.handlePageFlip}
+                currentPage={currentPage}
+                LastPage={pagination[pagination.length - 1]}
+              />
+              <PageNumbering
+                page={pagination}
+                current={currentPage}
+                max={pagination[pagination.length - 1]}
+              />
               {/* pagination ends */}
             </Grid>
             <Grid container direction={"column"}>
@@ -125,8 +137,16 @@ class SearchBox extends Component {
                 </Paper>
               )}
               {/* Pagination start */}
-              <PageNumbering page={pagination} current={currentPage} max={pagination[pagination.length - 1]}/>
-              <Pagination onHandlePageFlip={this.handlePageFlip} currentPage={currentPage} LastPage={pagination[pagination.length - 1]} />
+              <PageNumbering
+                page={pagination}
+                current={currentPage}
+                max={pagination[pagination.length - 1]}
+              />
+              <Pagination
+                onHandlePageFlip={this.handlePageFlip}
+                currentPage={currentPage}
+                LastPage={pagination[pagination.length - 1]}
+              />
               {/* pagination ends */}
             </Grid>
           </Grid>
@@ -139,9 +159,9 @@ class SearchBox extends Component {
 }
 
 const mapStateToProps = state => ({
-  userList: state.User.user.items,
-  pagination: state.User.pagination,
-  loading: state.User.fetching,
+  userList: state.UserList.user.items,
+  pagination: state.UserList.pagination,
+  loading: state.UserList.fetching,
   LoginBtn: state.Auth.LoginButton
 });
 

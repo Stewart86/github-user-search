@@ -1,4 +1,5 @@
 import axios from "axios";
+import { b64EncodeUnicode } from "../helper/b64Encode";
 
 const rootUrl = "https://api.github.com";
 
@@ -6,13 +7,12 @@ export const perPage = 10;
 
 axios.defaults.baseURL = rootUrl;
 
-export const GetUserList = (user, page) => {
-  var encodedId = sessionStorage.getItem("github-auth");
+var encodedId = sessionStorage.getItem("github-auth");
 
-  console.log(user, page);
+export const GetUserList = (user, page) => {
   return dispatch => {
     dispatch({
-      type: "GET_USER"
+      type: "GET_USER_LIST"
     });
     return axios
       .get(`/search/users`, {
@@ -23,6 +23,32 @@ export const GetUserList = (user, page) => {
           q: user,
           page: page,
           per_page: perPage
+        }
+      })
+      .then(response => {
+        dispatch({
+          type: "GET_USER_LIST_SUCCESS",
+          payload: response.data
+        });
+      })
+      .catch(error => {
+        dispatch({
+          type: "GET_USER_LIST_FAILED",
+          payload: error
+        });
+      });
+  };
+};
+
+export const GetUser = user => {
+  return dispatch => {
+    dispatch({
+      type: "GET_USER"
+    });
+    return axios
+      .get(`/users/${user}`, {
+        headers: {
+          Authorization: `Basic ${encodedId}`
         }
       })
       .then(response => {
@@ -40,26 +66,50 @@ export const GetUserList = (user, page) => {
   };
 };
 
-function b64EncodeUnicode(str) {
-  // first we use encodeURIComponent to get percent-encoded UTF-8,
-  // then we convert the percent encodings into raw bytes which
-  // can be fed into btoa.
-  return btoa(
-    encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function toSolidBytes(
-      match,
-      p1
-    ) {
-      return String.fromCharCode("0x" + p1);
-    })
-  );
-}
+
+export const GetUserFollowers = (user) => {
+  return dispatch => {
+    dispatch({
+      type: "GET_USER_FOLLOWERS"
+    });
+    return axios
+      .get(`/users/${user}/followers`, {
+        headers: {
+          Authorization: `Basic ${encodedId}`
+        },
+        params: {
+          page: 1,
+          per_page: perPage
+        }
+      })
+      .then(response => {
+        dispatch({
+          type: "GET_USER_FOLLOWERS_SUCCESS",
+          payload: response.data
+        });
+      })
+      .catch(error => {
+        dispatch({
+          type: "GET_USER_FOLLOWERS_FAILED",
+          payload: error
+        });
+      });
+  };
+};
 
 export const CheckSession = () => {
   if (sessionStorage.getItem("github-auth")) {
-    return dispatch =>
+    return dispatch => {
       dispatch({
         type: "GET_AUTH_SUCCESS"
       });
+    };
+  } else {
+    return dispatch => {
+      dispatch({
+        type: "LOGOUT"
+      });
+    };
   }
 };
 
@@ -68,7 +118,8 @@ export const CheckAuth = (userId, password) => {
     "github-auth",
     b64EncodeUnicode(`${userId}:${password}`)
   );
-  var encodedId = sessionStorage.getItem("github-auth");
+
+  encodedId = sessionStorage.getItem("github-auth");
 
   return dispatch => {
     dispatch({
