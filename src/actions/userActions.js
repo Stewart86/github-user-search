@@ -97,6 +97,69 @@ export const GetUserFollowers = (user) => {
   };
 };
 
+
+export const GetUserFollowing = (user) => {
+  return dispatch => {
+    dispatch({
+      type: "GET_USER_FOLLOWING"
+    });
+    return axios
+      .get(`/users/${user}/following`, {
+        headers: {
+          Authorization: `Basic ${encodedId}`
+        },
+        params: {
+          page: 1,
+          per_page: perPage
+        }
+      })
+      .then(response => {
+        dispatch({
+          type: "GET_USER_FOLLOWING_SUCCESS",
+          payload: response.data
+        });
+      })
+      .catch(error => {
+        dispatch({
+          type: "GET_USER_FOLLOWING_FAILED",
+          payload: error
+        });
+      });
+  };
+};
+
+
+export const GetUserRepos = (user) => {
+  return dispatch => {
+    dispatch({
+      type: "GET_USER_FOLLOWING"
+    });
+    return axios
+      .get(`/users/${user}/repos`, {
+        headers: {
+          Authorization: `Basic ${encodedId}`
+        },
+        params: {
+          page: 1,
+          per_page: perPage
+        }
+      })
+      .then(response => {
+        dispatch({
+          type: "GET_USER_REPOS_SUCCESS",
+          payload: response.data
+        });
+      })
+      .catch(error => {
+        dispatch({
+          type: "GET_USER_REPOS_FAILED",
+          payload: error
+        });
+      });
+  };
+};
+
+
 export const CheckSession = () => {
   if (sessionStorage.getItem("github-auth")) {
     return dispatch => {
