@@ -3,7 +3,7 @@ const initialState = {
   user: {
     items: []
   },
-  pagination: 1,
+  pagination: [],
   fetching: false,
   fetched: false,
   error: null

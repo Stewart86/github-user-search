@@ -9,7 +9,7 @@ import {
   Button,
   List,
   CircularProgress,
-  Paper
+  Paper,
 } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 
@@ -32,6 +32,23 @@ const styles = theme => ({
     margin: theme.spacing.unit
   }
 });
+
+const PageFlipper = props => {
+  return (
+    <React.Fragment>
+      <PageNumbering
+        page={props.pagination}
+        current={props.currentPage}
+        max={props.pagination[props.pagination.length - 1]}
+      />
+      <Pagination
+        onHandlePageFlip={props.handlePageFlip}
+        currentPage={props.currentPage}
+        LastPage={props.pagination[props.pagination.length - 1]}
+      />
+    </React.Fragment>
+  );
+};
 
 class SearchBox extends Component {
   static propTypes = {
@@ -97,22 +114,19 @@ class SearchBox extends Component {
               />
               <Button
                 className={classes.button}
-                onClick={() => this.handleClickOpen()}
+                onClick={() => this.handleClickOpen}
               >
                 {LoginBtn}
               </Button>
-              {/* Pagination start */}
-              <Pagination
-                onHandlePageFlip={this.handlePageFlip}
-                currentPage={currentPage}
-                LastPage={pagination[pagination.length - 1]}
-              />
-              <PageNumbering
-                page={pagination}
-                current={currentPage}
-                max={pagination[pagination.length - 1]}
-              />
-              {/* pagination ends */}
+              {pagination.length > 1 ? (
+                <PageFlipper
+                  pagination={pagination}
+                  currentPage={currentPage}
+                  handlePageFlip={this.handlePageFlip}
+                />
+              ) : (
+                ""
+              )}
             </Grid>
             <Grid container direction={"column"}>
               {userList.length === 0 ? (
@@ -136,18 +150,15 @@ class SearchBox extends Component {
                   </List>
                 </Paper>
               )}
-              {/* Pagination start */}
-              <PageNumbering
-                page={pagination}
-                current={currentPage}
-                max={pagination[pagination.length - 1]}
-              />
-              <Pagination
-                onHandlePageFlip={this.handlePageFlip}
-                currentPage={currentPage}
-                LastPage={pagination[pagination.length - 1]}
-              />
-              {/* pagination ends */}
+              {pagination.length > 1 ? (
+                <PageFlipper
+                  pagination={pagination}
+                  currentPage={currentPage}
+                  handlePageFlip={this.handlePageFlip}
+                />
+              ) : (
+                ""
+              )}
             </Grid>
           </Grid>
           <Grid item sm />

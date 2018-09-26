@@ -4,14 +4,11 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 
 import {
-  IconButton,
   ListItem,
   ListItemText,
   Avatar,
   Divider
 } from "@material-ui/core";
-
-import InfoIcon from "@material-ui/icons/InfoRounded";
 
 class UserList extends Component {
   state = {
@@ -43,10 +40,11 @@ class UserList extends Component {
   }
 
   render() {
-    const { avatar, userId, primary, location } = this.props;
+    const { avatar, userId, primary } = this.props;
     return (
       <React.Fragment>
-        <ListItem>
+        <ListItem button component={Link}
+            to={`/user/${userId}`}>
           <Avatar alt={userId} src={avatar} />
           <ListItemText
             primary={primary}
@@ -54,15 +52,6 @@ class UserList extends Component {
               this.state.following
             }`}
           />
-          <IconButton
-            component={Link}
-            to={`/user/${userId}`}
-            variant={"flat"}
-            color={"default"}
-            location={location}
-          >
-            <InfoIcon color={"primary"} />
-          </IconButton>
         </ListItem>
         <Divider />
       </React.Fragment>

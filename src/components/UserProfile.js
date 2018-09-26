@@ -8,7 +8,8 @@ import {
   CardContent,
   List,
   CardHeader,
-  Paper
+  Paper,
+  ButtonBase
 } from "@material-ui/core";
 import cyan from "@material-ui/core/colors/cyan";
 import { connect } from "react-redux";
@@ -24,7 +25,7 @@ import {
   GetUserRepos
 } from "../actions/userActions";
 
-import ReposList from "./ReposList"
+import ReposList from "./ReposList";
 
 const styles = theme => ({
   titleText: {
@@ -75,6 +76,7 @@ export class UserProfile extends Component {
   render() {
     const {
       user,
+      url,
       avatar,
       bio,
       company,
@@ -87,8 +89,8 @@ export class UserProfile extends Component {
     return (
       <React.Fragment>
         <Grid container>
-          <Grid item sm={2} />
-          <Grid item sm={2}>
+          <Grid item sm={1} />
+          <Grid item sm={3}>
             <Card>
               <CardMedia
                 className={classes.media}
@@ -97,17 +99,17 @@ export class UserProfile extends Component {
                 title={user}
               />
               <CardContent>
-                <Paper elevation={3} square={true}>
-                  <Typography
-                    className={classes.username}
-                    gutterBottom
-                    variant="headline"
-                    component="h2"
-                    align={"center"}
-                  >
-                    {user}
-                  </Typography>
-                </Paper>
+                  <Paper elevation={3} square={true}>
+                    <Typography
+                      className={classes.username}
+                      gutterBottom
+                      variant="headline"
+                      component="h2"
+                      align={"center"}
+                    >
+                      {user}
+                    </Typography>
+                  </Paper>
                 <Typography
                   className={classes.titleText}
                   variant={"subheading"}
@@ -135,9 +137,13 @@ export class UserProfile extends Component {
                 <Typography className={classes.text} variant={"body2"}>
                   {email}
                 </Typography>
+                <Typography variant={"display1"} style={{paddingTop:20}}>
+                Repositories
+                </Typography>
                 <List>
                   {repos.map(el => (
-                    <ReposList key={el.id}
+                    <ReposList
+                      key={el.id}
                       name={el.name}
                       repoUrl={el.url}
                       description={el.description}
@@ -148,9 +154,9 @@ export class UserProfile extends Component {
               </CardContent>
             </Card>
           </Grid>
-          <Grid item sm={6}>
+          <Grid item sm={7} lg={6}>
             <Grid container>
-              <Grid item sm={6}>
+              <Grid item xs={12} sm={6}>
                 <Card>
                   <CardHeader title={"Followers"} />
                   <CardContent>
@@ -168,7 +174,7 @@ export class UserProfile extends Component {
                   </CardContent>
                 </Card>
               </Grid>
-              <Grid item sm={6}>
+              <Grid item xs={12} sm={6}>
                 <Card>
                   <CardHeader title={"Followers"} />
                   <CardContent>
@@ -197,6 +203,7 @@ export class UserProfile extends Component {
 
 const mapStateToProps = state => ({
   user: state.User.user.login,
+  url: state.User.user.html_url,
   avatar: state.User.user.avatar_url,
   bio: state.User.user.bio,
   company: state.User.user.company,
