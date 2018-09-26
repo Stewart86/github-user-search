@@ -12,6 +12,7 @@ import {
 import { connect } from "react-redux";
 import { withStyles } from "@material-ui/core/styles";
 import { compose } from "redux";
+import {withRouter} from "react-router-dom";
 
 import UserList from "./UserList";
 import { GetUser, GetUserFollowers } from "../actions/userActions";
@@ -41,6 +42,14 @@ export class UserProfile extends Component {
   componentDidMount() {
     this.props.GetUser(this.props.match.params.id);
     this.props.GetUserFollowers(this.props.match.params.id);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    console.log(nextProps.location.pathname)
+    if (this.props.location.pathname !== nextProps.location.pathname) {
+      this.props.GetUser(nextProps.match.params.id);
+    this.props.GetUserFollowers(nextProps.match.params.id);
+    }
   }
 
   render() {
@@ -154,6 +163,7 @@ const mapDispatchToProps = dispatch => {
 };
 
 export default compose(
+  withRouter,
   withStyles(styles),
   connect(
     mapStateToProps,

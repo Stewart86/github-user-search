@@ -44,7 +44,7 @@ class UserList extends Component {
   }
 
   render() {
-    const { avatar, userId, primary } = this.props;
+    const { avatar, userId, primary, location } = this.props;
     return (
       <React.Fragment>
         <ListItem>
@@ -60,6 +60,7 @@ class UserList extends Component {
             to={`/user/${userId}`}
             variant={"flat"}
             color={"default"}
+            location={location}
           >
             <InfoIcon color={"primary"} />
           </IconButton>
