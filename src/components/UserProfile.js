@@ -38,6 +38,11 @@ const styles = theme => ({
   username: {
     padding: 5,
     backgroundColor: cyan[500]
+  },
+  nameButton: {
+    width: "100%",
+    padding: 15,
+    margin: 5
   }
 });
 
@@ -102,38 +107,39 @@ class UserProfile extends Component {
                 title={user}
               />
               <CardContent>
-                <Button size={"large"} color="primary" href={url}>
+                <Button
+                  variant={"raised"}
+                  className={classes.nameButton}
+                  color={"secondary"}
+                  size={"medium"}
+                  href={url}
+                >
                   {user} ({userId})
                 </Button>
-                <Typography
-                  className={classes.titleText}
-                  variant={"title"}
-                >
+                <Typography className={classes.titleText} variant={"title"}>
                   Bio:
                 </Typography>
                 <Typography className={classes.text} variant={"caption"}>
                   {bio ? bio : "None"}
                 </Typography>
-                <Typography
-                  className={classes.titleText}
-                  variant={"title"}
-                >
+                <Typography className={classes.titleText} variant={"title"}>
                   Company:
                 </Typography>
                 <Typography className={classes.text} variant={"caption"}>
                   {company ? company : "None"}
                 </Typography>
-                <Typography
-                  className={classes.titleText}
-                  variant={"title"}
-                >
+                <Typography className={classes.titleText} variant={"title"}>
                   Email:
                 </Typography>
-                <Typography className={classes.text} variant={"caption"} style={{ paddingBottom: 30 }}>
+                <Typography
+                  className={classes.text}
+                  variant={"caption"}
+                  style={{ paddingBottom: 30 }}
+                >
                   {email ? email : "None"}
                 </Typography>
                 <Divider />
-                <Typography variant={"title"} style={{ padding: 5 }} >
+                <Typography variant={"title"} style={{ padding: 5 }}>
                   Repositories
                 </Typography>
                 <List>
@@ -141,7 +147,7 @@ class UserProfile extends Component {
                     <ReposList
                       key={el.id}
                       name={el.name}
-                      repoUrl={el.url}
+                      repoUrl={el.html_url}
                       description={el.description}
                       lastUpdated={el.updated_at}
                     />

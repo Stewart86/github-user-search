@@ -137,6 +137,8 @@ class SearchBox extends Component {
                 Login with your GitHub account for better experience.
               </Typography>
               <Button
+              variant={"raised"}
+              color={"secondary"}
                 className={classes.button}
                 onClick={() => this.handleClickOpen()}
               >
