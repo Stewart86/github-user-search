@@ -40,14 +40,14 @@ class UserList extends Component {
   }
 
   render() {
-    const { avatar, userId, primary } = this.props;
+    const { avatar, userId } = this.props;
     return (
       <React.Fragment>
         <ListItem button component={Link}
             to={`/user/${userId}`}>
           <Avatar alt={userId} src={avatar} />
           <ListItemText
-            primary={primary}
+            primary={userId}
             secondary={`Followers: ${this.state.followers} | Following: ${
               this.state.following
             }`}

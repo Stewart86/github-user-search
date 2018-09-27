@@ -1,5 +1,10 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
+
+import { connect } from "react-redux";
+import { withStyles } from "@material-ui/core/styles";
+import { compose } from "redux";
+import { withRouter } from "react-router-dom";
 import {
   Grid,
   Typography,
@@ -8,24 +13,19 @@ import {
   CardContent,
   List,
   CardHeader,
-  Paper,
-  ButtonBase
+  Button,
+  Divider
 } from "@material-ui/core";
 import cyan from "@material-ui/core/colors/cyan";
-import { connect } from "react-redux";
-import { withStyles } from "@material-ui/core/styles";
-import { compose } from "redux";
-import { withRouter } from "react-router-dom";
 
 import UserList from "./UserList";
+import ReposList from "./ReposList";
 import {
   GetUser,
   GetUserFollowers,
   GetUserFollowing,
   GetUserRepos
 } from "../actions/userActions";
-
-import ReposList from "./ReposList";
 
 const styles = theme => ({
   titleText: {
@@ -41,7 +41,7 @@ const styles = theme => ({
   }
 });
 
-export class UserProfile extends Component {
+class UserProfile extends Component {
   static propTypes = {
     GetUser: PropTypes.func.isRequired,
     match: PropTypes.object.isRequired,
@@ -53,7 +53,9 @@ export class UserProfile extends Component {
     followers: PropTypes.array.isRequired,
     GetUserFollowing: PropTypes.func.isRequired,
     GetUserFollowers: PropTypes.func.isRequired,
-    GetUserRepos: PropTypes.func.isRequired
+    GetUserRepos: PropTypes.func.isRequired,
+    classes: PropTypes.object.isRequired,
+    userId: PropTypes.object.isRequired
   };
 
   componentDidMount() {
@@ -84,13 +86,14 @@ export class UserProfile extends Component {
       classes,
       followers,
       following,
-      repos
+      repos,
+      userId
     } = this.props;
     return (
       <React.Fragment>
         <Grid container>
-          <Grid item sm={1} />
-          <Grid item sm={3}>
+          <Grid item sm={1} lg={2} />
+          <Grid item sm={3} lg={2}>
             <Card>
               <CardMedia
                 className={classes.media}
@@ -99,46 +102,39 @@ export class UserProfile extends Component {
                 title={user}
               />
               <CardContent>
-                  <Paper elevation={3} square={true}>
-                    <Typography
-                      className={classes.username}
-                      gutterBottom
-                      variant="headline"
-                      component="h2"
-                      align={"center"}
-                    >
-                      {user}
-                    </Typography>
-                  </Paper>
+                <Button size={"large"} color="primary" href={url}>
+                  {user} ({userId})
+                </Button>
                 <Typography
                   className={classes.titleText}
-                  variant={"subheading"}
+                  variant={"title"}
                 >
                   Bio:
                 </Typography>
-                <Typography className={classes.text} variant={"body2"}>
+                <Typography className={classes.text} variant={"caption"}>
                   {bio ? bio : "None"}
                 </Typography>
                 <Typography
                   className={classes.titleText}
-                  variant={"subheading"}
+                  variant={"title"}
                 >
                   Company:
                 </Typography>
-                <Typography className={classes.text} variant={"body2"}>
-                  {company}
+                <Typography className={classes.text} variant={"caption"}>
+                  {company ? company : "None"}
                 </Typography>
                 <Typography
                   className={classes.titleText}
-                  variant={"subheading"}
+                  variant={"title"}
                 >
                   Email:
                 </Typography>
-                <Typography className={classes.text} variant={"body2"}>
-                  {email}
+                <Typography className={classes.text} variant={"caption"} style={{ paddingBottom: 30 }}>
+                  {email ? email : "None"}
                 </Typography>
-                <Typography variant={"display1"} style={{paddingTop:20}}>
-                Repositories
+                <Divider />
+                <Typography variant={"title"} style={{ padding: 5 }} >
+                  Repositories
                 </Typography>
                 <List>
                   {repos.map(el => (
@@ -202,7 +198,8 @@ export class UserProfile extends Component {
 }
 
 const mapStateToProps = state => ({
-  user: state.User.user.login,
+  user: state.User.user.name,
+  userId: state.User.user.login,
   url: state.User.user.html_url,
   avatar: state.User.user.avatar_url,
   bio: state.User.user.bio,

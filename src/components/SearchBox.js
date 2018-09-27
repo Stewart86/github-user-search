@@ -10,6 +10,7 @@ import {
   List,
   CircularProgress,
   Paper,
+  Typography
 } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 
@@ -26,28 +27,49 @@ const styles = theme => ({
   contents: {
     padding: theme.spacing.unit * 2,
     textAlign: "center",
-    color: theme.palette.text.secondary
+    color: theme.palette.text.secondary,
+    marginRight: "auto",
+    marginLeft: "auto",
+    [theme.breakpoints.down("sm")]: {
+      marginRight: "auto",
+      marginLeft: "auto"
+    },
+    [theme.breakpoints.up("sm")]: {
+      paddingLeft: "13vw",
+      paddingRight: "13vw"
+    },
+    [theme.breakpoints.up("md")]: {
+      paddingLeft: "23vw",
+      paddingRight: "23vw"
+    },
+    [theme.breakpoints.up("lg")]: {
+      paddingLeft: "35vw",
+      paddingRight: "35vw"
+    }
   },
   button: {
     margin: theme.spacing.unit
-  }
+  },
 });
 
 const PageFlipper = props => {
-  return (
-    <React.Fragment>
-      <PageNumbering
-        page={props.pagination}
-        current={props.currentPage}
-        max={props.pagination[props.pagination.length - 1]}
-      />
-      <Pagination
-        onHandlePageFlip={props.handlePageFlip}
-        currentPage={props.currentPage}
-        LastPage={props.pagination[props.pagination.length - 1]}
-      />
-    </React.Fragment>
-  );
+  if (props.pagination.length > 1) {
+    return (
+      <React.Fragment>
+        <PageNumbering
+          page={props.pagination}
+          current={props.currentPage}
+          max={props.pagination[props.pagination.length - 1]}
+        />
+        <Pagination
+          onHandlePageFlip={props.handlePageFlip}
+          currentPage={props.currentPage}
+          LastPage={props.pagination[props.pagination.length - 1]}
+        />
+      </React.Fragment>
+    );
+  }
+  return "";
 };
 
 class SearchBox extends Component {
@@ -61,7 +83,8 @@ class SearchBox extends Component {
   state = {
     userId: "Enter User ID here",
     currentPage: 1,
-    open: false
+    open: false,
+    searchPadding: { paddingTop: "25vh" }
   };
 
   componentDidMount() {
@@ -69,11 +92,15 @@ class SearchBox extends Component {
   }
 
   handleChange = event => {
-    this.setState({ userId: event.target.value });
+    this.setState({
+      userId: event.target.value,
+      searchPadding: { paddingTop: "" }
+    });
     this.props.GetUserList(event.target.value, this.state.currentPage);
   };
 
   handleClickOpen = () => {
+    console.log(this.props.LoginBtn === "login");
     if (this.props.LoginBtn === "login") {
       this.setState({ open: true });
     } else {
@@ -102,9 +129,22 @@ class SearchBox extends Component {
     return (
       <div>
         <Grid container className={classes.contents}>
-          <Grid item sm />
-          <Grid item sm>
-            <Grid>
+          {/* Actual content area */}
+          <Grid item sm={12}>
+            {/* Button for login /  logout start*/}
+            <Grid sm={12} style={this.state.searchPadding}>
+              <Typography variant={"caption"}>
+                Login with your GitHub account for better experience.
+              </Typography>
+              <Button
+                className={classes.button}
+                onClick={() => this.handleClickOpen()}
+              >
+                {LoginBtn}
+              </Button>
+            </Grid>
+            {/* Button for login /  logout end*/}
+            <Grid sm={12}>
               <TextField
                 label={"Search"}
                 placeholder={userId}
@@ -112,23 +152,14 @@ class SearchBox extends Component {
                 variant="outlined"
                 onChange={this.handleChange}
               />
-              <Button
-                className={classes.button}
-                onClick={() => this.handleClickOpen}
-              >
-                {LoginBtn}
-              </Button>
-              {pagination.length > 1 ? (
-                <PageFlipper
-                  pagination={pagination}
-                  currentPage={currentPage}
-                  handlePageFlip={this.handlePageFlip}
-                />
-              ) : (
-                ""
-              )}
             </Grid>
-            <Grid container direction={"column"}>
+            {/* Users list start */}
+            <Grid sm={12}>
+              <PageFlipper
+                pagination={pagination}
+                currentPage={currentPage}
+                handlePageFlip={this.handlePageFlip}
+              />
               {userList.length === 0 ? (
                 ""
               ) : (
@@ -142,26 +173,19 @@ class SearchBox extends Component {
                           key={el.id}
                           avatar={el.avatar_url}
                           userId={el.login}
-                          primary={el.login}
-                          secondary={"Followers: <1234> | Following: <4321>"}
                         />
                       ))
                     )}
                   </List>
                 </Paper>
               )}
-              {pagination.length > 1 ? (
-                <PageFlipper
-                  pagination={pagination}
-                  currentPage={currentPage}
-                  handlePageFlip={this.handlePageFlip}
-                />
-              ) : (
-                ""
-              )}
+              <PageFlipper
+                pagination={pagination}
+                currentPage={currentPage}
+                handlePageFlip={this.handlePageFlip}
+              />
             </Grid>
           </Grid>
-          <Grid item sm />
         </Grid>
         <LoginDialog open={open} handleClose={() => this.handleClose()} />
       </div>
