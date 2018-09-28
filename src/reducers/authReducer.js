@@ -13,6 +13,7 @@ export const Auth = (state = initialState, action) => {
           LoginButton: "logout"
       });
       case "GET_AUTH_FAILED":
+      alert(`Username or Password you have entered is incorrect. Please try again. Original message from server: ${action.payload}`)
       return Object.assign({}, state, {
           LoginButton: "login"
       })

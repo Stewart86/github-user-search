@@ -30,7 +30,7 @@ export default class NavBar extends Component {
             </Typography>
           </Toolbar>
         </AppBar>
-        <div style={{ paddingTop: 68 }} />
+        <div style={{ paddingTop: 88 }} />
       </div>
     );
   }

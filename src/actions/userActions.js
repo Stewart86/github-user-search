@@ -67,7 +67,7 @@ export const GetUser = user => {
 };
 
 
-export const GetUserFollowers = (user) => {
+export const GetUserFollowers = (user, page) => {
   return dispatch => {
     dispatch({
       type: "GET_USER_FOLLOWERS"
@@ -78,8 +78,8 @@ export const GetUserFollowers = (user) => {
           Authorization: `Basic ${encodedId}`
         },
         params: {
-          page: 1,
-          per_page: perPage
+          page: page,
+          per_page: 1
         }
       })
       .then(response => {
@@ -201,9 +201,10 @@ export const CheckAuth = (userId, password) => {
         });
       })
       .catch(error => {
+        sessionStorage.removeItem("github-auth")
         dispatch({
           type: "GET_AUTH_FAILED",
-          payload: error.message
+          payload: error
         });
       });
   };

@@ -1,4 +1,5 @@
-import React, { Component } from "react";
+import React from "react"
+import { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { compose } from "redux";
@@ -17,8 +18,7 @@ import { withStyles } from "@material-ui/core/styles";
 import { GetUserList, CheckSession, Logout } from "../actions/userActions";
 import UserList from "./UserList";
 import LoginDialog from "./LoginDialog";
-import Pagination from "./Pagination";
-import PageNumbering from "./PageNumbering";
+import PageFlipper  from "./PageFlipper";
 
 const styles = theme => ({
   root: {
@@ -51,26 +51,6 @@ const styles = theme => ({
     margin: theme.spacing.unit
   },
 });
-
-const PageFlipper = props => {
-  if (props.pagination.length > 1) {
-    return (
-      <React.Fragment>
-        <PageNumbering
-          page={props.pagination}
-          current={props.currentPage}
-          max={props.pagination[props.pagination.length - 1]}
-        />
-        <Pagination
-          onHandlePageFlip={props.handlePageFlip}
-          currentPage={props.currentPage}
-          LastPage={props.pagination[props.pagination.length - 1]}
-        />
-      </React.Fragment>
-    );
-  }
-  return "";
-};
 
 class SearchBox extends Component {
   static propTypes = {
