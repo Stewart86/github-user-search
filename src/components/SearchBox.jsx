@@ -64,7 +64,7 @@ class SearchBox extends Component {
     userId: "Enter User ID here",
     currentPage: 1,
     open: false,
-    searchPadding: { paddingTop: "25vh" },
+    searchPadding: { paddingTop: "20vh" },
     info:
       "You are not logged in.\n To show complete search result with followers and following,\nlogin with your GitHub account."
   };
@@ -76,7 +76,7 @@ class SearchBox extends Component {
   handleChange = event => {
     if (event.target.value === "") {
       this.setState({
-        searchPadding: { paddingTop: "25vh" },
+        searchPadding: { paddingTop: "20vh" },
         userId: "Enter User ID here"
       });
     } else {
