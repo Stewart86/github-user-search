@@ -11,5 +11,5 @@ const loggerMiddleware = createLogger({
 
 export const store = createStore(
   rootReducer,
-  composeWithDevTools(applyMiddleware(ReduxThunk, loggerMiddleware))
+  composeWithDevTools(applyMiddleware(ReduxThunk))
 );
