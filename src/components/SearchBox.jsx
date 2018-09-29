@@ -1,4 +1,4 @@
-import React from "react"
+import React from "react";
 import { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
@@ -18,7 +18,7 @@ import { withStyles } from "@material-ui/core/styles";
 import { GetUserList, CheckSession, Logout } from "../actions/userActions";
 import UserList from "./UserList";
 import LoginDialog from "./LoginDialog";
-import PageFlipper  from "./PageFlipper";
+import PageFlipper from "./PageFlipper";
 
 const styles = theme => ({
   root: {
@@ -49,7 +49,7 @@ const styles = theme => ({
   },
   button: {
     margin: theme.spacing.unit
-  },
+  }
 });
 
 class SearchBox extends Component {
@@ -64,7 +64,9 @@ class SearchBox extends Component {
     userId: "Enter User ID here",
     currentPage: 1,
     open: false,
-    searchPadding: { paddingTop: "25vh" }
+    searchPadding: { paddingTop: "25vh" },
+    info:
+      "You are not logged in.\n To show complete search result with followers and following,\nlogin with your GitHub account."
   };
 
   componentDidMount() {
@@ -72,15 +74,21 @@ class SearchBox extends Component {
   }
 
   handleChange = event => {
-    this.setState({
-      userId: event.target.value,
-      searchPadding: { paddingTop: "" }
-    });
+    if (event.target.value === "") {
+      this.setState({
+        searchPadding: { paddingTop: "25vh" },
+        userId: "Enter User ID here"
+      });
+    } else {
+      this.setState({
+        userId: event.target.value,
+        searchPadding: { paddingTop: "" }
+      });
+    }
     this.props.GetUserList(event.target.value, this.state.currentPage);
   };
 
   handleClickOpen = () => {
-    console.log(this.props.LoginBtn === "login");
     if (this.props.LoginBtn === "login") {
       this.setState({ open: true });
     } else {
@@ -109,63 +117,82 @@ class SearchBox extends Component {
     return (
       <div>
         <Grid container className={classes.contents}>
-          {/* Actual content area */}
+          {/* Main search area */}
           <Grid item sm={12}>
             {/* Button for login /  logout start*/}
-            <Grid sm={12} style={this.state.searchPadding}>
-              <Typography variant={"caption"}>
-                Login with your GitHub account for better experience.
-              </Typography>
-              <Button
-              variant={"raised"}
-              color={"secondary"}
-                className={classes.button}
-                onClick={() => this.handleClickOpen()}
-              >
-                {LoginBtn}
-              </Button>
+            <Grid item sm={12} style={this.state.searchPadding}>
+              {sessionStorage.getItem("github-auth") == null
+                ? this.state.info.split("\n").map((item, key) => {
+                    return (
+                      <Typography key={key} variant={"caption"}>
+                        {item}
+                        <br />
+                      </Typography>
+                    );
+                  })
+                : ""}
+              {LoginBtn === "login" || LoginBtn === "logging in.." ? (
+                <Button
+                  variant={"raised"}
+                  color={"secondary"}
+                  className={classes.button}
+                  onClick={() => this.handleClickOpen()}
+                >
+                  {LoginBtn}
+                </Button>
+              ) : (
+                ""
+              )}
             </Grid>
+
             {/* Button for login /  logout end*/}
-            <Grid sm={12}>
+            <Grid item sm={12}>
               <TextField
                 label={"Search"}
                 placeholder={userId}
                 margin="normal"
                 variant="outlined"
                 onChange={this.handleChange}
+                fullWidth
               />
             </Grid>
             {/* Users list start */}
-            <Grid sm={12}>
-              <PageFlipper
-                pagination={pagination}
-                currentPage={currentPage}
-                handlePageFlip={this.handlePageFlip}
-              />
-              {userList.length === 0 ? (
+            <Grid item sm={12}>
+              {userId === "Enter User ID here" ? (
                 ""
               ) : (
-                <Paper>
-                  <List width={400}>
-                    {loading ? (
-                      <CircularProgress />
-                    ) : (
-                      userList.map(el => (
-                        <UserList
-                          key={el.id}
-                          avatar={el.avatar_url}
-                          userId={el.login}
-                        />
-                      ))
-                    )}
-                  </List>
-                </Paper>
+                <React.Fragment>
+                  <PageFlipper
+                    pagination={pagination}
+                    currentPage={currentPage}
+                    handlePageFlip={this.handlePageFlip}
+                  />
+                  {userList.length === 0 ? (
+                    ""
+                  ) : (
+                    <Paper>
+                      <List width={400}>
+                        {loading ? (
+                          <CircularProgress />
+                        ) : (
+                          userList.map(el => (
+                            <UserList
+                              key={el.id}
+                              avatar={el.avatar_url}
+                              userId={el.login}
+                            />
+                          ))
+                        )}
+                      </List>
+                    </Paper>
+                  )}
+                  <PageFlipper
+                    pagination={pagination}
+                    currentPage={currentPage}
+                    handlePageFlip={this.handlePageFlip}
+                  />
+                </React.Fragment>
               )}
-              <PageFlipper
-                pagination={pagination}
-                currentPage={currentPage}
-                handlePageFlip={this.handlePageFlip}
-              />
             </Grid>
           </Grid>
         </Grid>

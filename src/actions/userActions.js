@@ -1,9 +1,6 @@
 import axios from "axios";
 import { b64EncodeUnicode } from "../helper/b64Encode";
-
-const rootUrl = "https://api.github.com";
-
-export const perPage = 10;
+import { rootUrl, perPage } from "../helper/config";
 
 axios.defaults.baseURL = rootUrl;
 
@@ -66,8 +63,7 @@ export const GetUser = user => {
   };
 };
 
-
-export const GetUserFollowers = (user, page) => {
+export const GetUserFollowers = user => {
   return dispatch => {
     dispatch({
       type: "GET_USER_FOLLOWERS"
@@ -76,10 +72,6 @@ export const GetUserFollowers = (user, page) => {
       .get(`/users/${user}/followers`, {
         headers: {
           Authorization: `Basic ${encodedId}`
-        },
-        params: {
-          page: page,
-          per_page: 1
         }
       })
       .then(response => {
@@ -97,8 +89,7 @@ export const GetUserFollowers = (user, page) => {
   };
 };
 
-
-export const GetUserFollowing = (user) => {
+export const GetUserFollowing = user => {
   return dispatch => {
     dispatch({
       type: "GET_USER_FOLLOWING"
@@ -107,10 +98,6 @@ export const GetUserFollowing = (user) => {
       .get(`/users/${user}/following`, {
         headers: {
           Authorization: `Basic ${encodedId}`
-        },
-        params: {
-          page: 1,
-          per_page: perPage
         }
       })
       .then(response => {
@@ -128,8 +115,7 @@ export const GetUserFollowing = (user) => {
   };
 };
 
-
-export const GetUserRepos = (user) => {
+export const GetUserRepos = user => {
   return dispatch => {
     dispatch({
       type: "GET_USER_FOLLOWING"
@@ -158,7 +144,6 @@ export const GetUserRepos = (user) => {
       });
   };
 };
-
 
 export const CheckSession = () => {
   if (sessionStorage.getItem("github-auth")) {
@@ -201,7 +186,7 @@ export const CheckAuth = (userId, password) => {
         });
       })
       .catch(error => {
-        sessionStorage.removeItem("github-auth")
+        sessionStorage.removeItem("github-auth");
         dispatch({
           type: "GET_AUTH_FAILED",
           payload: error

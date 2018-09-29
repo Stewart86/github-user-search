@@ -1,4 +1,4 @@
-import {perPage} from "../actions/userActions"
+import { GetPagination } from "../helper/GetPagination";
 const initialState = {
   user: {
     items: []
@@ -16,11 +16,8 @@ export const UserList = (state = initialState, action) => {
         fetching: true
       });
     case "GET_USER_LIST_SUCCESS":
-      var totalCount = action.payload.total_count;
-      var maxPages = totalCount / perPage;
-      var zeroBasedList = Array.from(Array(Math.ceil(maxPages)).keys());
-      var paginationNumList = Array.from(zeroBasedList.map(el => el + 1));
-      
+      var paginationNumList = GetPagination(action.payload.total_count);
+
       return Object.assign({}, state, {
         user: action.payload,
         pagination: paginationNumList,

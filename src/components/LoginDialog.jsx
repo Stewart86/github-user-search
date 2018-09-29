@@ -2,13 +2,15 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 
-import Button from "@material-ui/core/Button";
-import TextField from "@material-ui/core/TextField";
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
-import DialogTitle from "@material-ui/core/DialogTitle";
+import {
+  Button,
+  TextField,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle
+} from "@material-ui/core";
 
 import { CheckAuth } from "../actions/userActions";
 
@@ -40,7 +42,7 @@ class LoginDialog extends Component {
   render() {
     const { open, handleClose } = this.props;
     return (
-      <div>
+      <React.Fragment>
         <Dialog
           open={open}
           onClose={handleClose}
@@ -74,7 +76,6 @@ class LoginDialog extends Component {
               Cancel
             </Button>
             <Button
-            autoFocus
               onClick={() =>
                 this.handleLogin(this.state.userId, this.state.password)
               }
@@ -84,14 +85,12 @@ class LoginDialog extends Component {
             </Button>
           </DialogActions>
         </Dialog>
-      </div>
+      </React.Fragment>
     );
   }
 }
 
-const mapStateToProps = state => ({
-    
-});
+const mapStateToProps = state => ({});
 
 const mapDispatchToProps = dispatch => {
   return {

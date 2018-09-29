@@ -3,7 +3,6 @@ import Pagination from "./Pagination";
 import PageNumbering from "./PageNumbering";
 
 export default (props) => {
-  console.log(props.pagination)
   if (props.pagination.length > 1) {
     return (
       <React.Fragment>

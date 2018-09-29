@@ -13,16 +13,20 @@ class UserList extends Component {
           justify={"center"}
           alignItems={"center"}
         >
-          <ListItem button component={"a"} href={repoUrl} >
-            <Typography  variant={"headline"}>
+          <ListItem button component={"a"} href={repoUrl}>
+            <Typography
+              style={{ width: "100%" }}
+              variant={"headline"}
+              gutterBottom
+            >
               {name}
+              <Typography variant={"body1"}>
+                {description}
+                <Typography variant={"caption"} align={"right"}>
+                  last updated: {lastUpdated}
+                </Typography>
+              </Typography>
             </Typography>
-          </ListItem>
-          <ListItem>
-            <Typography variant={"body1"}>{description}</Typography>
-          </ListItem>
-          <ListItem>
-            <Typography variant={"caption"}>{lastUpdated}</Typography>
           </ListItem>
         </Grid>
         <Divider />

@@ -1,16 +1,15 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
-
 import axios from "axios";
 
-import {
-  ListItem,
-  ListItemText,
-  Avatar,
-  Divider
-} from "@material-ui/core";
+import { ListItem, ListItemText, Avatar, Divider } from "@material-ui/core";
 
 class UserList extends Component {
+  static propTypes = {
+    avatar: PropTypes.string.isRequired,
+    userId: PropTypes.string.isRequired
+  };
   state = {
     followers: "loading...",
     following: "loading..."
@@ -43,8 +42,7 @@ class UserList extends Component {
     const { avatar, userId } = this.props;
     return (
       <React.Fragment>
-        <ListItem button component={Link}
-            to={`/user/${userId}`}>
+        <ListItem button component={Link} to={`/user/${userId}`}>
           <Avatar alt={userId} src={avatar} />
           <ListItemText
             primary={userId}
