@@ -77,9 +77,9 @@ Without logging in to your GitHub account, the API requests that is allowed are 
 
 ### Privacy concern with your login credential
 
-This page login to GitHub via basic authentication by encoding your userid and password with base64, which can be easily decoded. To safe guard your credential, please make sure your are logged out after use.
+This page login to GitHub via basic authentication by encoding your userid and password with base64, which can be easily decoded. To safe guard your credentials, please make sure your are logged out after use.
 
-your encoded credential is saved in the session storage of your local machine. By logging out, this varible will be removed from your session storage.
+your encoded credentials is saved in the session storage of your local machine. By logging out, this varible will be removed from your session storage.
 
 ### User Search
 
@@ -89,9 +89,9 @@ To reload the search, simple delete one character and entering back.
 
 ### User Profile
 
-By clicking on the user you will be directed to the profile page if the user. 
+By clicking on the user you will be directed to the profile page of the user. 
 
 2 similar lists like the user search will be shown except it is reflecting the user's followers and following. Clicking on the list will again direct you to that user's profile.
 
-Clicking on the user's name will direct you to their profile on GitHub, as will as their repositories will direct to their repositories on GitHub.
+Clicking on the user's name will direct you to their profile on GitHub, as well as their repositories will direct to their repositories on GitHub.
 
